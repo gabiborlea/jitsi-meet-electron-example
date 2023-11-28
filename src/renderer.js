@@ -26,6 +26,19 @@
  * ```
  */
 
-import './index.css';
+import "./index.css";
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
+window.onload = () => {
+  const api = new JitsiMeetExternalAPI("8x8.vc", {
+    roomName:
+      "vpaas-magic-cookie-43bfa39638d54e078798e2caff2d2010/test",
+    parentNode: document.querySelector("#jaas-container")
+  });
+  api.on("_requestDesktopSources", async (request, callback) => {
+    const { options } = request;
+
+    window.jitsiAPI.getDesktopSources(options)
+        .then(sources => callback({ sources }))
+        .catch((error) => callback({ error }));
+  });
+};
